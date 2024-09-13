@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 50px;">
+    <center><i class="fas fa-check-circle" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
+    <h2 class="text-center">Payment Successful</h2>
+    <br>
+    <div class="text-center">
+        <a href="{% url 'store' %}" class="btn btn-success">Shop more</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row invoice row-printable">
+        <div class="col-md-12">
+            <div class="panel panel-default plain" id="dash_0">
+                <div class="panel-body p30">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="invoice-logo">
+                                <img src="{% static './images/elogo1.png' %}" alt="Invoice logo">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="invoice-from">
+                                <ul class="list-unstyled text-right">
+                                    <li><strong>Invoiced To</strong></li>
+                                    <li>{{order.full_name}}</li>
+                                    <li>{{order.full_address}}</li>
+                                    <li>{{order.city}}, {{order.address_line_1}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="invoice-details mt25">
+                                <div class="well">
+                                    <ul class="list-unstyled mb0">
+                                        <li><strong>Order</strong> #{{order_number}}</li>
+                                        <li><strong>Transaction ID</strong> {{transID}}</li>
+                                        <li><strong>Order Date:</strong> {{order.created_at}}</li>
+                                        <li><strong>Status:</strong> {{payment.status}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="invoice-items">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Products</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for item in ordered_products %}
+                                            <tr>
+                                                <td>
+                                                    {{item.product.product_name}}
+                                                    <p class="text-muted small">
+                                                       {% if item.variations.all %}
+                                                           {% for i in item.variations.all %}
+                                                               {{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
+                                                           {% endfor %}
+                                                       {% endif %}
+                                                   </p>
+                                                </td>
+                                                <td>{{item.quantity}}</td>
+                                                <td>Rs{{item.product_price}} </td>
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Sub Total:</th>
+                                                <th>Rs{{subtotal}} </th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Grand Total:</th>
+                                                <th>Rs{{order.order_total}} </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="invoice-footer mt25">
+                                <p>Thank you for shopping with us!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Style for the invoice container */
+.container {
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff; /* White background for the card */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    width: 80%;
+    max-width: 900px; /* Optional: limits the width on large screens */
+}
+
+/* Style for the invoice logo */
+.invoice-logo img {
+    max-height: 40px;
+    margin-bottom: 20px;
+}
+
+/* Style for table headers and cells */
+.table {
+    margin-top: 20px;
+}
+
+.table thead th {
+    background-color: #b3e5fc; /* Light blue background */
+    color: #0277bd; /* Darker blue text */
+    text-align: center;
+    border: 1px solid #ddd; /* Border for header */
+}
+
+.table tbody td {
+    border: 1px solid #ddd; /* Border for cells */
+    padding: 15px;
+    text-align: center;
+}
+
+.table tfoot th {
+    background-color: #b3e5fc; /* Light blue background */
+    color: #0277bd; /* Darker blue text */
+    font-weight: bold;
+    text-align: right;
+}
+
+/* Style for the invoice details section */
+.invoice-details {
+    margin-top: 25px;
+}
+
+.invoice-details .well {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f5f5f5; /* Light grey background for well */
+}
+
+/* Style for the invoice footer */
+.invoice-footer {
+    margin-top: 25px;
+    text-align: center;
+    color: #0277bd; /* Darker blue text */
+    font-size: 16px;
+}
+
+/* Additional styling for the text-muted class */
+.text-muted {
+    color: #6c757d; /* Light grey for muted text */
+}
+
+</style>
+
+{% endblock %}

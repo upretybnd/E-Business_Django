@@ -206,3 +206,4 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 
     }
     return render(request, 'store/checkout.html', context)
+
